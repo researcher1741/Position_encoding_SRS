@@ -26,8 +26,3 @@ To run the respective dataset using PyTorch, please use the below commands
 The code in main.py has a loop over the datasets names. Please chose those that you want to test and delete the others.
 Do not use other names than those in main.py ('Fashion', 'Beauty', 'Men', 'Video_Games')
 
-### OPEN QUESTIONS:
-    1. Architecture: Why the user cxt is never used?
-    2. Sampler: Other systems of generation, like based on the distribution, the size of each user.
-    3. Sampler: Create a combination of different percentages with different techniques for training:
-        a. add masking
