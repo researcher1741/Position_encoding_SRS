@@ -24,5 +24,5 @@ To run the respective dataset using PyTorch, please use the below commands
 - python main.py
 
 The code in main.py has a loop over the datasets names. Please chose those that you want to test and delete the others.
-Do not use other names than those in main.py ('Fashion', 'Beauty', 'Men', 'Video_Games')
+Do not use other names than those in main.py ('fashion', 'beauty', 'men', 'games')
 
