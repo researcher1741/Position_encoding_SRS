@@ -91,8 +91,7 @@ class UserBlock(nn.Module):
 
     def forward(self, q: Tensor, q_mask: Tensor, k: Tensor, k_mask: Tensor) -> Tensor:
         # Attention part
-        s = self.attn_layer(q, k, k,
-                            q_mask=q_mask, k_mask=k_mask, causal=None)
+        s = self.attn_layer(q, k, k, q_mask=q_mask, k_mask=k_mask, causal=None)
         if self.config.res_user_block == "mul":
             s *= q
         elif self.config.res_user_block == "sum":
