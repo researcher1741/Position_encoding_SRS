@@ -23,8 +23,8 @@ class ItemEncoding(nn.Module):
 
         if config.positional_encoding_type == "absolute":
             self.position_encod = SinPositionalEncoding(config)
-        elif config.positional_encoding_type == "rope":
-            self.position_encod = RotaryPositionalEncoding(config)
+        elif config.positional_encoding_type == "rotatory":
+            self.position_encod = RotaryEncoding(config)
         elif config.positional_encoding_type == "learnt":
             self.position_encod = LearnedPositionalEncoding(config)
         else:
@@ -97,10 +97,10 @@ class SinPositionalEncoding(nn.Module):
         L, H = config.maxlen, config.embedding_d
         # Create matrix of [SeqLen, HiddenDim] representing the positional encoding for max_len inputs
         pe = torch.zeros(L, H)  # [L,H] = [75, 90]
-        # We compute the exponential for sin and cosine. We use half of the length: [0,2,4,6,8,10, ...]
-        position = torch.arange(0, L).unsqueeze(1)  # [L,1]
-        Normalizer = -math.log(10000) / H
-        div_term = torch.exp(torch.arange(0, H, 2).float() * Normalizer)
+        # We compute the exponential for sin and cosine. We use half of the length: [0,1,2,3, ..., L-1]
+        position = torch.arange(0, L).unsqueeze(1)  # [L,1] dim for [0,1,2,3, ..., L-1]
+        Normalizer = -math.log(10000) / H  #
+        div_term = torch.exp(torch.arange(0, H, 2).float() * Normalizer)  # e^2j * Normalizer
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
         # pe = [L,H] = [75, 90]
@@ -258,7 +258,7 @@ class LearnedPositionalEncoding(nn.Module):
         return x
 
 
-class RotaryPositionalEncoding(nn.Module):
+class RotaryEncoding(nn.Module):
     """
     Module for applying rotary positional encoding to input sequences.
 
@@ -291,7 +291,6 @@ class RotaryPositionalEncoding(nn.Module):
     def __init__(self, config):
         """
         Initialize the RotaryPositionalEncoding module.
-
         Args:
         - config (object): Configuration object with required attributes.
 
@@ -314,6 +313,7 @@ class RotaryPositionalEncoding(nn.Module):
         Tensor: Output tensor after applying rotary positional encoding.
 
         """
+        # position_ids => L x H, rows [ 0, 1, 2, ...,H]
         position_ids = torch.arange(0, x.size(1), device=x.device).unsqueeze(0).expand(x.size(0), -1)
         position_embeddings = self.position_embeddings(position_ids)
 
@@ -323,6 +323,9 @@ class RotaryPositionalEncoding(nn.Module):
 
         sin_angles = torch.sin(angle_rads)
         cos_angles = torch.cos(angle_rads)
+
+        # Add rotation
+        sin_angles = sin_angles * torch.tensor([(-1) ** i for i in range(sin_angles.size(-1))], device=x.device)
 
         # Combine sine and cosine embeddings
         position_embeddings[:, :, 0::2] = sin_angles
