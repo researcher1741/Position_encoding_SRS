@@ -12,14 +12,44 @@ DATA_PATH = join(BASE_PATH, "Data")
 # ########################    ITEMS    ###########################
 BEAUTY_ITEMS = join(DATA_PATH, "Beauty_feat_cat.dat")
 FASHION_ITEMS = join(DATA_PATH, "Fashion_imgs.dat")
+SUBFASHION_ITEMS = join(DATA_PATH, "SubFashion_imgs.dat")
 MEN_ITEMS = join(DATA_PATH, "Men_imgs.dat")
+SUBMEN_ITEMS = join(DATA_PATH, "SubMen_imgs.dat")
+SUBMEN2_ITEMS = join(DATA_PATH, "SubMen2_imgs.dat")
+SUBMEN3_ITEMS = join(DATA_PATH, "SubMen3_imgs.dat")
 GAMES_ITEMS = join(DATA_PATH, "Video_Games_feat.dat")
+SUBGAMES_ITEMS = join(DATA_PATH, "Video_SubGames_feat.dat")
+SUBGAMES2_ITEMS = join(DATA_PATH, "Video_SubGames_feat2.dat")
+SUBGAMES3_ITEMS = join(DATA_PATH, "Video_SubGames_feat3.dat")
+SUBGAMES4_ITEMS = join(DATA_PATH, "Video_SubGames_feat4.dat")
+
+# ########################    TXT    ###########################
+BEAUTY_TXT = join(DATA_PATH, "Beauty.txt")
+FASHION_TXT = join(DATA_PATH, "Fashion.txt")
+SUBFASHION_TXT = join(DATA_PATH, "SubFashion.txt")
+MEN_TXT = join(DATA_PATH, "Men.txt")
+SUBMEN_TXT = join(DATA_PATH, "SubMen.txt")
+SUBMEN2_TXT = join(DATA_PATH, "SubMen2.txt")
+SUBMEN3_TXT = join(DATA_PATH, "SubMen3.txt")
+GAMES_TXT = join(DATA_PATH, "Video_Games.txt")
+SUBGAMES_TXT = join(DATA_PATH, "Video_SubGames.txt")
+SUBGAMES2_TXT = join(DATA_PATH, "Video_SubGames2.txt")
+SUBGAMES3_TXT = join(DATA_PATH, "Video_SubGames3.txt")
+SUBGAMES4_TXT = join(DATA_PATH, "Video_SubGames4.txt")
 
 # ########################    CXT    ###########################
 BEAUTY_CXT = join(DATA_PATH, "CXTDictSasRec_Beauty.dat")
 FASHION_CXT = join(DATA_PATH, "CXTDictSasRec_Fashion.dat")
+SUBFASHION_CXT = join(DATA_PATH, "CXTDictSasRec_SubFashion.dat")
 MEN_CXT = join(DATA_PATH, "CXTDictSasRec_Men.dat")
+SUBMEN_CXT = join(DATA_PATH, "CXTDictSasRec_SubMen.dat")
+SUBMEN2_CXT = join(DATA_PATH, "CXTDictSasRec_SubMen2.dat")
+SUBMEN3_CXT = join(DATA_PATH, "CXTDictSasRec_SubMen3.dat")
 GAMES_CXT = join(DATA_PATH, "CXTDictSasRec_Games.dat")
+SUBGAMES_CXT = join(DATA_PATH, "CXTDictSasRec_SubGames.dat")
+SUBGAMES2_CXT = join(DATA_PATH, "CXTDictSasRec_SubGames2.dat")
+SUBGAMES3_CXT = join(DATA_PATH, "CXTDictSasRec_SubGames3.dat")
+SUBGAMES4_CXT = join(DATA_PATH, "CXTDictSasRec_SubGames4.dat")
 
 # ########################    RESULTS    ###########################
 RESULTS = join(DATA_PATH, "Results")
@@ -107,10 +137,10 @@ class Args:
         # EXPERIMENTS - Loss
         self.loss_type = "CE"
         # EXPERIMENTS - Encoding
-        self.positional_encoding_type = ""   # "learnt", "absolute", "", "rope", "rope1"
+        self.positional_encoding_type = ""  # "learnt", "absolute", "", "rotatory", "rope1"
         self.position_concatenation = False
         self.RMHA_encoder = False
-        self.ROPEMHA_encoder = False
+        self.ROPE_encoder = False
         self.decoder_head = "masked"  # "RMHA", "dot"
         self.max_relative_position = 4
         # EXPERIMENTS - Architecture
@@ -163,6 +193,39 @@ Men_Args = Args(**{"dataset": 'Men',
                    'num_epochs': int(10 * 100),
                    'dropout_rate': 0.3,
                    'residual_connection_decoder': False})
+SubMen_Args = Args(**{"dataset": 'SubMen',
+                      'num_heads': 3,
+                      'batch_size': 512,
+                      'maxlen': 35,
+                      'norm_type': 1e-2,
+                      'max_norm': 1e-4,
+                      'hidden_units': 390,
+                      'lr': 6e-6,
+                      'num_epochs': int(10 * 100),
+                      'dropout_rate': 0.3,
+                      'residual_connection_decoder': False})
+SubMen2_Args = Args(**{"dataset": 'SubMen2',  # 10k users, 40k items
+                       'num_heads': 3,
+                       'batch_size': 512,
+                       'maxlen': 35,
+                       'norm_type': 1e-2,
+                       'max_norm': 1e-4,
+                       'hidden_units': 390,
+                       'lr': 6e-6,
+                       'num_epochs': int(10 * 100),
+                       'dropout_rate': 0.3,
+                       'residual_connection_decoder': False})
+SubMen3_Args = Args(**{"dataset": 'SubMen3',  # 10k users, 80k items
+                       'num_heads': 3,
+                       'batch_size': 512,
+                       'maxlen': 35,
+                       'norm_type': 1e-2,
+                       'max_norm': 1e-4,
+                       'hidden_units': 390,
+                       'lr': 6e-6,
+                       'num_epochs': int(10 * 100),
+                       'dropout_rate': 0.3,
+                       'residual_connection_decoder': False})
 Games_Args = Args(**{"dataset": 'Video_Games',
                      'num_encoder_blocks': 1,
                      'num_heads': 3,
@@ -177,6 +240,62 @@ Games_Args = Args(**{"dataset": 'Video_Games',
                      'residual_connection_decoder': "mul",
                      'hidden_act': "silu"
                      })
+SubGames_Args = Args(**{"dataset": 'Video_SubGames',
+                        'num_encoder_blocks': 1,
+                        'num_heads': 3,
+                        'batch_size': 512,
+                        'maxlen': 50,
+                        'norm_type': 2.0,
+                        'max_norm': 0.2,
+                        'hidden_units': 90,
+                        'lr': 1e-4,
+                        'num_epochs': int(8 * 100),
+                        'dropout_rate': 0.5,
+                        'residual_connection_decoder': "mul",
+                        'hidden_act': "silu"
+                        })
+SubGames2_Args = Args(**{"dataset": 'Video_SubGames2',
+                         'num_encoder_blocks': 1,
+                         'num_heads': 3,
+                         'batch_size': 512,
+                         'maxlen': 50,
+                         'norm_type': 2.0,
+                         'max_norm': 0.2,
+                         'hidden_units': 90,
+                         'lr': 1e-4,
+                         'num_epochs': int(8 * 100),
+                         'dropout_rate': 0.5,
+                         'residual_connection_decoder': "mul",
+                         'hidden_act': "silu"
+                         })
+SubGames3_Args = Args(**{"dataset": 'Video_SubGames3',
+                         'num_encoder_blocks': 1,
+                         'num_heads': 3,
+                         'batch_size': 512,
+                         'maxlen': 50,
+                         'norm_type': 2.0,
+                         'max_norm': 0.2,
+                         'hidden_units': 90,
+                         'lr': 1e-4,
+                         'num_epochs': int(8 * 100),
+                         'dropout_rate': 0.5,
+                         'residual_connection_decoder': "mul",
+                         'hidden_act': "silu"
+                         })
+SubGames4_Args = Args(**{"dataset": 'Video_SubGames4',
+                         'num_encoder_blocks': 1,
+                         'num_heads': 3,
+                         'batch_size': 512,
+                         'maxlen': 50,
+                         'norm_type': 2.0,
+                         'max_norm': 0.2,
+                         'hidden_units': 90,
+                         'lr': 1e-4,
+                         'num_epochs': int(8 * 100),
+                         'dropout_rate': 0.5,
+                         'residual_connection_decoder': "mul",
+                         'hidden_act': "silu"
+                         })
 Fashion_Args = Args(**{"dataset": 'Fashion',
                        'num_heads': 3,
                        'batch_size': 512,
@@ -188,6 +307,17 @@ Fashion_Args = Args(**{"dataset": 'Fashion',
                        'num_epochs': int(8 * 100),
                        'dropout_rate': 0.3,
                        'residual_connection_decoder': False})
+SubFashion2_Args = Args(**{"dataset": 'SubFashion2',
+                           'num_heads': 3,
+                           'batch_size': 512,
+                           'maxlen': 35,
+                           'norm_type': 1e-4,
+                           'max_norm': None,
+                           'hidden_units': 90,
+                           'lr': 1e-5,
+                           'num_epochs': int(8 * 100),
+                           'dropout_rate': 0.3,
+                           'residual_connection_decoder': False})
 
 
 def create_tree():
