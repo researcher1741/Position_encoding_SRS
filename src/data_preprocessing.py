@@ -2,10 +2,18 @@ from typing import List
 import numpy as np
 from collections import defaultdict
 
-from src.config import FASHION_CXT, MEN_CXT, BEAUTY_CXT, GAMES_CXT
-from src.config import FASHION_ITEMS, MEN_ITEMS, BEAUTY_ITEMS, GAMES_ITEMS
+from src.config import FASHION_CXT, MEN_CXT, BEAUTY_CXT, GAMES_CXT, SUBMEN_CXT, SUBFASHION_CXT, \
+    SUBGAMES_CXT, SUBGAMES2_CXT, SUBGAMES3_CXT, SUBGAMES4_CXT, SUBMEN2_CXT, SUBMEN3_CXT
+from src.config import FASHION_TXT, MEN_TXT, BEAUTY_TXT, GAMES_TXT, SUBMEN_TXT, SUBFASHION_TXT, \
+    SUBGAMES_TXT, SUBGAMES2_TXT, SUBGAMES3_TXT, SUBGAMES4_TXT, SUBMEN2_TXT, SUBMEN3_TXT
+from src.config import FASHION_ITEMS, MEN_ITEMS, BEAUTY_ITEMS, GAMES_ITEMS, SUBMEN_ITEMS, SUBFASHION_ITEMS, \
+    SUBGAMES_ITEMS, SUBGAMES2_ITEMS, SUBGAMES3_ITEMS, SUBGAMES4_ITEMS, SUBMEN2_ITEMS, SUBMEN3_ITEMS
 from src.utils import load_data
-from src.config import Beauty_Args, Fashion_Args, Men_Args, Games_Args
+from src.config import Beauty_Args, Fashion_Args, Men_Args, Games_Args, SubMen_Args, SubMen2_Args, SubMen3_Args, \
+    SubFashion2_Args, SubGames_Args, SubGames2_Args, SubGames3_Args, SubGames4_Args
+
+datasets_list = ['fashion', 'men', 'beauty', 'video_games', 'submen', 'submen2', 'submen3', 'subfashion2',
+                 'video_subgames', 'video_subgames2', 'video_subgames3', 'video_subgames4']
 
 
 def get_ItemData(name: str):
@@ -13,9 +21,12 @@ def get_ItemData(name: str):
     Args:
         name (str): name of the dataset
     """
-    NAMES = dict(zip(['fashion', 'men', 'beauty', 'video_games'],
-                     [FASHION_ITEMS, MEN_ITEMS, BEAUTY_ITEMS, GAMES_ITEMS]))
+    print(f"get_ItemData input name {name}")
+    NAMES = dict(zip(datasets_list, [FASHION_ITEMS, MEN_ITEMS, BEAUTY_ITEMS, GAMES_ITEMS,
+                                     SUBMEN_ITEMS, SUBMEN2_ITEMS, SUBMEN3_ITEMS, SUBFASHION_ITEMS, SUBGAMES_ITEMS,
+                                     SUBGAMES2_ITEMS, SUBGAMES3_ITEMS, SUBGAMES4_ITEMS]))
     path = NAMES[name.lower()]
+    print(f"loading path {path}")
     ItemFeatures = load_data(path)
     ItemFeatures = np.vstack((np.zeros(ItemFeatures.shape[1]), ItemFeatures))
     return ItemFeatures
@@ -27,8 +38,9 @@ def get_CXTData(name):
         name (str): name of the dataset
     :return Dict[tuple(int, int): List[float, float, ...]]
     """
-    NAMES = dict(zip(['fashion', 'men', 'beauty', 'video_games'],
-                     [FASHION_CXT, MEN_CXT, BEAUTY_CXT, GAMES_CXT]))
+    NAMES = dict(zip(datasets_list, [FASHION_CXT, MEN_CXT, BEAUTY_CXT, GAMES_CXT, SUBMEN_CXT,
+                                     SUBMEN2_CXT, SUBMEN3_CXT, SUBFASHION_CXT, SUBGAMES_CXT,
+                                     SUBGAMES2_CXT, SUBGAMES3_CXT, SUBGAMES4_CXT]))
     path = NAMES[name.lower()]
     return load_data(path)
 
@@ -47,8 +59,8 @@ def get_features(args):
         CXTDict: Dict
         UserFeatures: List
     """
-    ItemFeatures = get_ItemData(args.dataset)
-    CXTDict = get_CXTData(args.dataset)
+    ItemFeatures = get_ItemData(args.dataset.lower())
+    CXTDict = get_CXTData(args.dataset.lower())
     UserFeatures = []
     print("ItemFeatures DF dimensions", ItemFeatures.shape)
     return ItemFeatures, CXTDict, UserFeatures
@@ -65,7 +77,10 @@ def data_partition(fname: str) -> List:
     User = defaultdict(list)
 
     # assume user/item index starting from 1
-    f = open('./Data/%s.txt' % fname, 'r')
+    NAMES = dict(zip(datasets_list, [FASHION_TXT, MEN_TXT, BEAUTY_TXT, GAMES_TXT, SUBMEN_TXT, SUBMEN2_TXT, SUBMEN3_TXT,
+                                     SUBFASHION_TXT, SUBGAMES_TXT, SUBGAMES2_TXT, SUBGAMES3_TXT, SUBGAMES4_TXT]))
+    path = NAMES[fname.lower()]
+    f = open(path, 'r')
     for line in f:
         user_ids, items_ids = line.rstrip().split(' ')
         user_ids = int(user_ids)
@@ -100,8 +115,24 @@ def data_loading_and_partition(dataset_name, config=None):
             args = Fashion_Args
         elif dataset_name == 'Men':
             args = Men_Args
-        elif dataset_name == 'Video_Games':
+        elif dataset_name in ['Video_Games', 'Games']:
             args = Games_Args
+        elif dataset_name in ['Video_SubGames', 'SubGames']:
+            args = SubGames_Args
+        elif dataset_name in ['Video_SubGames2', 'SubGames2']:
+            args = SubGames2_Args
+        elif dataset_name in ['Video_SubGames3', 'SubGames3']:
+            args = SubGames3_Args
+        elif dataset_name in ['Video_SubGames4', 'SubGames4']:
+            args = SubGames4_Args
+        elif dataset_name == 'SubMen':
+            args = SubMen_Args
+        elif dataset_name == 'SubMen2':
+            args = SubMen2_Args
+        elif dataset_name == 'SubMen3':
+            args = SubMen3_Args
+        elif dataset_name == "SubFashion2":
+            args = SubFashion2_Args
     else:
         args = config
 
