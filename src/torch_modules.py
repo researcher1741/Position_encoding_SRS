@@ -33,7 +33,7 @@ class Skeleton(nn.Module):
                 config2 = copy.deepcopy(config)
                 config1 = copy.deepcopy(config)
                 config1._add(**{
-                    "ROPEMHA_encoder": True,
+                    "ROPE_encoder": True,
                 })
                 if config.num_encoder_blocks > 1:
                     self.encoders = nn.ModuleList([EncoderBlock(config1)] +
