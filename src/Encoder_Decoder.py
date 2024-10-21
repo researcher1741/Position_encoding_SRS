@@ -25,7 +25,7 @@ class EncoderBlock(nn.Module):
                                    config.attention_probs_dropout_prob,
                                    config.intercalate_act,
                                    config.max_relative_position)
-        elif config.ROPEMHA_encoder:
+        elif config.ROPE_encoder:
             self.attn_layer = ROPEMHA(config.embedding_d,
                                       config.num_heads,
                                       config.attention_probs_dropout_prob,
@@ -109,8 +109,7 @@ class DecoderBlock(nn.Module):
     def forward(self, o: Tensor, o_mask: Tensor, p: Tensor, p_mask: Tensor) -> Tensor:
         # causal = -1 if self.training else None
         # Attention part
-        s = self.attn_layer(o, p, p, q_mask=o_mask,
-                            k_mask=p_mask, causal=None)
+        s = self.attn_layer(o, p, p, q_mask=o_mask, k_mask=p_mask, causal=None)
         if self.config.residual_connection_decoder == "mul":
             s *= o
         elif self.config.residual_connection_decoder == "sum":
