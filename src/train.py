@@ -17,8 +17,10 @@ from transformers import get_linear_schedule_with_warmup, AdamW
 from torch.nn.parallel import DistributedDataParallel as DDP
 import torch.distributed as dist
 
-from src.config import STATE_DICT_KEY, OPTIMIZER_STATE_DICT_KEY, CHECK, RESULTS
-from src.config import Men_Args, Beauty_Args, Fashion_Args, Games_Args
+from src.config import STATE_DICT_KEY, OPTIMIZER_STATE_DICT_KEY, CHECK, RESULTS, SubGames_Args, SubGames2_Args, \
+    SubGames3_Args
+from src.config import Men_Args, Beauty_Args, Fashion_Args, Games_Args, \
+    SubMen_Args, SubFashion2_Args, SubMen2_Args, SubMen3_Args, SubGames4_Args
 from src.data_preprocessing import data_loading_and_partition
 from src.sampler import PytorchSampler, Val_sampler
 from src.torch_modules import Skeleton
@@ -301,22 +303,49 @@ class SeqRS_Trainer:
         return NDCG, HIT
 
 
-def callme(hidden_act, encoding, max_norm, norm_type, dataset, need):
-    seeds = [102, 203, 304, 405, 506, 607, 708, 808, 901, 1001, 987, 8765, 7654, 6543][:need]
+def callme(hidden_act, encoding, max_norm, norm_type, dataset, start, need):
+    if norm_type in [1E-2] and max_norm in [1E-0]:
+        start, end = 2, 5
+    seeds = [45, 46, 304, 567,
+             8765, 708, 456,
+             203, 1741, 1742,
+             1743, 1744, 1745,
+             345, 987, 607,
+             102, 7654, 1001,
+             234, 506, 890,
+             123][start:need]
     RMHA_encoder = False
     RMHA_decoder = False
-    ROPEMHA_encoder = False
+    ROPE_encoder = False
     Longer = False
-    print(encoding)
+    dataset = dataset.lower()
+    print(f"dataset {dataset}")
+    print(f"encoding {encoding}")
 
     if dataset == "men":
         config1 = copy.copy(Men_Args)
-    if dataset == "beauty":
+    elif dataset == "submen":
+        config1 = copy.copy(SubMen_Args)
+    elif dataset == "submen2":
+        config1 = copy.copy(SubMen2_Args)
+    elif dataset == "submen3":
+        config1 = copy.copy(SubMen3_Args)
+    elif dataset == "subfashion2":
+        config1 = copy.copy(SubFashion2_Args)
+    elif dataset == "beauty":
         config1 = copy.copy(Beauty_Args)
-    if dataset == "fashion":
+    elif dataset == "fashion":
         config1 = copy.copy(Fashion_Args)
-    if dataset == "games":
+    elif dataset == "games":
         config1 = copy.copy(Games_Args)
+    elif dataset == "subgames":
+        config1 = copy.copy(SubGames_Args)
+    elif dataset == "subgames2":
+        config1 = copy.copy(SubGames2_Args)
+    elif dataset == "subgames3":
+        config1 = copy.copy(SubGames3_Args)
+    elif dataset == "subgames4":
+        config1 = copy.copy(SubGames4_Args)
 
     if "leaky" in hidden_act:
         hidden_act = "leakyrelu"
@@ -349,28 +378,28 @@ def callme(hidden_act, encoding, max_norm, norm_type, dataset, need):
         positional_encoding_type = "learnt"
         position_concatenation = False
 
-    elif "conROPE" == encoding:
-        base_name1 = "conROPE_"
-        positional_encoding_type = "rope"
+    elif "conRotatory" == encoding:
+        base_name1 = "conRotatory_"
+        positional_encoding_type = "rotatory"
         position_concatenation = True
-    elif "ROPE" == encoding:
-        base_name1 = "ROPE_"
-        positional_encoding_type = "rope"
+    elif "Rotatory" == encoding:
+        base_name1 = "Rotatory_"
+        positional_encoding_type = "rotatory"
         position_concatenation = False
 
-    elif encoding in ["ROPE1", "ROPEMHAONE", "rope1"]:
-        base_name1 = "ROPEMHAONE"
+    elif encoding in ["ROPE1", "ROPEONE", "rope1"]:
+        base_name1 = "ROPEONE"
         positional_encoding_type = "rope1"
         position_concatenation = False
-        ROPEMHA_encoder = False
+        ROPE_encoder = False
         RMHA_encoder = False
         RMHA_decoder = False
 
-    elif "ROPEMHA" == encoding:
-        base_name1 = "ROPEMHA_"
+    elif "ROPE" == encoding:
+        base_name1 = "ROPE_"
         positional_encoding_type = ""
         position_concatenation = False
-        ROPEMHA_encoder = True
+        ROPE_encoder = True
         RMHA_encoder = False
         RMHA_decoder = False
 
@@ -394,7 +423,7 @@ def callme(hidden_act, encoding, max_norm, norm_type, dataset, need):
         config._add(**{
             "num_epochs": num_epochs,
             "hidden_act": hidden_act,
-            "ROPEMHA_encoder": ROPEMHA_encoder,
+            "ROPE_encoder": ROPE_encoder,
             "RMHA_encoder": RMHA_encoder,
             "RMHA_decoder": RMHA_decoder,
             "positional_encoding_type": positional_encoding_type,
