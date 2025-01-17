@@ -303,7 +303,54 @@ class SeqRS_Trainer:
         return NDCG, HIT
 
 
-def callme(hidden_act, encoding, max_norm, norm_type, dataset, start, need, sasrecplus):
+def callme(hidden_act, encoding, max_norm, norm_type, dataset, start, need, sasrecplus=False):
+    """
+        Executes a series of experiments for a Sequential Recommendation System (SRS) model with
+        specified configurations, including encoding type, activation function, and dataset.
+
+        Parameters:
+        ----------
+        hidden_act : str
+            The activation function to use in the model (e.g., "leakyrelu", "silu").
+        encoding : str
+            The type of positional encoding to apply (e.g., "RMHA4", "ROPE", "RotatoryCon").
+        max_norm : float
+            The maximum norm value for gradient clipping or encoding normalization.
+        norm_type : float
+            The type of normalization applied, represented as a numeric value (e.g., `1E-2`).
+        dataset : str
+            The dataset name (e.g., "men", "submen", "fashion"). This determines the dataset-specific configuration.
+        start : int
+            The starting index for selecting random seeds from a predefined list.
+        need : int
+            The number of seeds to use, starting from the `start` index.
+        sasrecplus : bool
+            A flag indicating whether to use the SASRec++ model (True) or another model variant (False).
+
+        Behavior:
+        ---------
+        - Loads the configuration based on the specified dataset.
+        - Adjusts the configuration based on the chosen encoding type, activation function, and other parameters.
+        - Iterates through a list of predefined random seeds and spawns a training process for each seed.
+        - Supports additional configurations like "longer training" and SASRec++-specific modifications.
+
+        Returns:
+        --------
+        None
+            This function does not return a value but spawns training processes for each seed.
+
+        Example Usage:
+        --------------
+        callme("leakyrelu", "RMHA4", 0.1, 2, "fashion", 0, 6, True)
+
+        Notes:
+        ------
+        - The `sasrecplus` parameter modifies the model to use dot product-based decoding and adjusts
+          hyperparameters like batch size and hidden units.
+        - Positional encoding types are interpreted from the `encoding` string, with specific behaviors for
+          RMHA, ROPE, and concatenated encodings.
+        - The configuration includes additional dataset-specific arguments and training settings.
+        """
     if norm_type in [1E-2] and max_norm in [1E-0]:
         start, end = 2, 5
     seeds = [45, 46, 304, 567,
