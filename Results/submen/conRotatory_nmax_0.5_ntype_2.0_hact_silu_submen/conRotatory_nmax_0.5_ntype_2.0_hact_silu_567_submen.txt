@@ -1,0 +1,417 @@
+ The dataset SubMen contains 8331 users and 10000 items in total
+average sequence length: {2.43}
+ItemFeatures DF dimensions (10001, 2048)
+
+#######  Training configuration
+norm_type:            	2.0
+max_norm:             	0.5
+dataset:              	SubMen
+train_dir:            	default
+batch_size:           	512
+lr:                   	6e-06
+std:                  	0.01
+maxlen:               	35
+hidden_units:         	390
+num_heads:            	3
+pad_token_id:         	0
+num_epochs:           	1000
+dropout_rate:         	0.3
+cxt_size:             	6
+n_workers:            	1
+top_k:                	10
+test_size:            	10000
+validation_point:     	1
+print_every_n_point:  	1
+exponential_print:    	True
+last_items:           	False
+reverse:              	True
+only_finals:          	True
+sampling_mode:        	False
+add_users:            	False
+mask_user:            	False
+user_act:             	silu
+user_FF:              	True
+loss_type:            	CE
+positional_encoding_type: 	rotatory
+position_concatenation: 	True
+RMHA_encoder:         	False
+ROPE_encoder:         	False
+decoder_head:         	masked
+max_relative_position: 	4
+normalization_type:   	ln
+num_groups:           	3
+residual_connection_encoder_FF: 	mul
+residual_connection_encoder: 	mul
+residual_connection_decoder: 	False
+dropout_btn_MHA_FF:   	False
+num_encoder_blocks:   	3
+num_decoder_blocks:   	1
+ln_in_AH_decoder:     	False
+ln_in_AH_encoder:     	True
+ln_in_Q_decoder:      	False
+ln_in_Q_encoder:      	True
+layer_norm_eps:       	1e-08
+hidden_act:           	silu
+hidden_act_out:       	sigmoid
+intercalate_act:      	True
+mask_before_FF_decoder: 	True
+PN:                   	False
+embedding_d:          	390
+embedding_g:          	1950
+intermediate_size:    	1170
+hidden_dropout_prob:  	0.3
+attention_probs_dropout_prob: 	0.3
+saving:               	False
+RMHA_decoder:         	False
+
+#######
+Loading Configuration ...
+Number of steps in the Train dataset: 16272
+Number of steps in the Validation dataset: 17
+Number of steps in the Test dataset: 17
+Loading Model ...
+Amount of model parameters 11889541
+Loading scheduler and optimizer ...
+Evaluation every 16 steps, i.e, 1.0 epochs
+
+#### test Acc: 0, NDCG: 0.13348755015103478 HIT: 0.29660554644519677
+
+#### val Acc: 0, NDCG: 0.48777197845076403 HIT: 0.5778869551417689
+Epoch: 1, plus 0 steps train_loss: 0.7599
+
+#### test Acc: 0, NDCG: 0.1312899505344777 HIT: 0.2934555847968684
+
+#### val Acc: 0, NDCG: 0.47553892043356 HIT: 0.5701546299724926
+Epoch: 2, plus 0 steps train_loss: 0.7568
+
+#### test Acc: 0, NDCG: 0.12576289157923068 HIT: 0.28576954612780364
+
+#### val Acc: 0, NDCG: 0.4779423242822012 HIT: 0.5691437658696572
+Epoch: 3, plus 0 steps train_loss: 0.7615
+
+#### test Acc: 0, NDCG: 0.12560909166749926 HIT: 0.2802300439060516
+
+#### val Acc: 0, NDCG: 0.4762544517234437 HIT: 0.5701298336330936
+Epoch: 4, plus 0 steps train_loss: 0.7469
+
+#### test Acc: 0, NDCG: 0.1307120684076493 HIT: 0.28539429485823103
+
+#### val Acc: 0, NDCG: 0.4865110905663903 HIT: 0.586595429538722
+Epoch: 5, plus 0 steps train_loss: 0.7546
+
+#### test Acc: 0, NDCG: 0.13270817386492906 HIT: 0.28453634151502327
+
+#### val Acc: 0, NDCG: 0.4785288583206315 HIT: 0.5753668205141769
+Epoch: 6, plus 0 steps train_loss: 0.744
+
+#### test Acc: 0, NDCG: 0.13716772144107608 HIT: 0.29485905760685566
+
+#### val Acc: 0, NDCG: 0.4760694086223173 HIT: 0.5685403882776132
+Epoch: 7, plus 0 steps train_loss: 0.7564
+
+#### test Acc: 0, NDCG: 0.1269822677769415 HIT: 0.2857025960114261
+
+#### val Acc: 0, NDCG: 0.48004355308406743 HIT: 0.5687395855374524
+Epoch: 8, plus 0 steps train_loss: 0.7474
+
+#### test Acc: 0, NDCG: 0.12991590636198524 HIT: 0.29294064748201437
+
+#### val Acc: 0, NDCG: 0.4741454442294502 HIT: 0.566598834902666
+Epoch: 9, plus 0 steps train_loss: 0.7492
+
+#### test Acc: 0, NDCG: 0.1346065990149539 HIT: 0.2955831107173085
+
+#### val Acc: 0, NDCG: 0.4794882127106458 HIT: 0.5709167041366906
+Epoch: 10, plus 0 steps train_loss: 0.7497
+
+#### test Acc: 0, NDCG: 0.13182188727235422 HIT: 0.2952748095641134
+
+#### val Acc: 0, NDCG: 0.46617744914458187 HIT: 0.5524194614896318
+Epoch: 12, plus 0 steps train_loss: 0.7392
+
+#### test Acc: 0, NDCG: 0.14068777078943687 HIT: 0.301128398751587
+
+#### val Acc: 0, NDCG: 0.4778262131784447 HIT: 0.5752519308082945
+Epoch: 14, plus 0 steps train_loss: 0.7411
+
+#### test Acc: 0, NDCG: 0.1277284891872473 HIT: 0.28821281210325855
+
+#### val Acc: 0, NDCG: 0.48261181964215244 HIT: 0.5762016306072788
+Epoch: 16, plus 0 steps train_loss: 0.732
+
+#### test Acc: 0, NDCG: 0.14112025152732247 HIT: 0.3071927568239526
+
+#### val Acc: 0, NDCG: 0.4732516311107568 HIT: 0.5605096804909014
+Epoch: 18, plus 0 steps train_loss: 0.7359
+
+#### test Acc: 0, NDCG: 0.13384747767593 HIT: 0.2902328872196361
+
+#### val Acc: 0, NDCG: 0.4741653582722389 HIT: 0.5681171974185357
+Epoch: 20, plus 0 steps train_loss: 0.7355
+
+#### test Acc: 0, NDCG: 0.13958851075159048 HIT: 0.3019441983178163
+
+#### val Acc: 0, NDCG: 0.4832951180739342 HIT: 0.5768603866906474
+Epoch: 22, plus 0 steps train_loss: 0.7301
+
+#### test Acc: 0, NDCG: 0.13332877256342246 HIT: 0.2885632670334321
+
+#### val Acc: 0, NDCG: 0.4775435627809918 HIT: 0.5679105612568769
+Epoch: 24, plus 0 steps train_loss: 0.7257
+
+#### test Acc: 0, NDCG: 0.1337562819887938 HIT: 0.30450813981168007
+
+#### val Acc: 0, NDCG: 0.4743601753725283 HIT: 0.5683949164198053
+Epoch: 26, plus 0 steps train_loss: 0.7175
+
+#### test Acc: 0, NDCG: 0.122468504597659 HIT: 0.2760402890922556
+
+#### val Acc: 0, NDCG: 0.4797277702639498 HIT: 0.5704629311256877
+Epoch: 28, plus 0 steps train_loss: 0.732
+
+#### test Acc: 0, NDCG: 0.13240790516274775 HIT: 0.2998092334955565
+
+#### val Acc: 0, NDCG: 0.4814555305634722 HIT: 0.5778216581146848
+Epoch: 30, plus 0 steps train_loss: 0.7171
+
+#### test Acc: 0, NDCG: 0.11858527776469127 HIT: 0.2654704361510791
+
+#### val Acc: 0, NDCG: 0.4715582239044167 HIT: 0.5603046974185357
+Epoch: 32, plus 0 steps train_loss: 0.7182
+
+#### test Acc: 0, NDCG: 0.12134481879173258 HIT: 0.2756476803851037
+
+#### val Acc: 0, NDCG: 0.4776342580456864 HIT: 0.5721804909013964
+Epoch: 36, plus 0 steps train_loss: 0.7164
+
+#### test Acc: 0, NDCG: 0.12661104455745942 HIT: 0.27727349370503596
+
+#### val Acc: 0, NDCG: 0.4773367843737179 HIT: 0.5732988058082945
+Epoch: 40, plus 0 steps train_loss: 0.7144
+
+#### test Acc: 0, NDCG: 0.127721559123884 HIT: 0.28508020789250954
+
+#### val Acc: 0, NDCG: 0.4731847743191203 HIT: 0.5760867409013964
+Epoch: 44, plus 0 steps train_loss: 0.7096
+
+#### test Acc: 0, NDCG: 0.14727457761961188 HIT: 0.31174619128226827
+
+#### val Acc: 0, NDCG: 0.4846169061051211 HIT: 0.5741030337494709
+Epoch: 48, plus 0 steps train_loss: 0.7119
+
+#### test Acc: 0, NDCG: 0.24772584124059205 HIT: 0.3883470429538722
+
+#### val Acc: 0, NDCG: 0.5577128539112083 HIT: 0.6473224912716885
+Epoch: 52, plus 0 steps train_loss: 0.709
+
+#### test Acc: 0, NDCG: 0.19305087809488874 HIT: 0.3503127644942869
+
+#### val Acc: 0, NDCG: 0.5106490454352358 HIT: 0.5990456715509945
+Epoch: 56, plus 0 steps train_loss: 0.7101
+
+#### test Acc: 0, NDCG: 0.13608222516519236 HIT: 0.2912478840457046
+
+#### val Acc: 0, NDCG: 0.4881510599555879 HIT: 0.5816799685251799
+Epoch: 60, plus 0 steps train_loss: 0.7167
+
+#### test Acc: 0, NDCG: 0.20960906766977722 HIT: 0.36659073476512904
+
+#### val Acc: 0, NDCG: 0.515004037875742 HIT: 0.5971537108548455
+Epoch: 64, plus 0 steps train_loss: 0.7091
+
+#### test Acc: 0, NDCG: 0.4768426937105184 HIT: 0.6101172370926788
+
+#### val Acc: 0, NDCG: 0.683617852084888 HIT: 0.7697701214028777
+Epoch: 68, plus 0 steps train_loss: 0.7077
+
+#### test Acc: 0, NDCG: 0.27987187878713077 HIT: 0.43211258199322894
+
+#### val Acc: 0, NDCG: 0.5680283226168591 HIT: 0.6650345165044436
+Epoch: 72, plus 0 steps train_loss: 0.7103
+
+#### test Acc: 0, NDCG: 0.54722903599601 HIT: 0.668492779305967
+
+#### val Acc: 0, NDCG: 0.7447748137211999 HIT: 0.8197587150867541
+Epoch: 80, plus 0 steps train_loss: 0.7049
+
+#### test Acc: 0, NDCG: 0.6058585480153674 HIT: 0.7183722690964875
+
+#### val Acc: 0, NDCG: 0.7687234089371232 HIT: 0.8317246019360982
+Epoch: 88, plus 0 steps train_loss: 0.7005
+
+#### test Acc: 0, NDCG: 0.6143887098016814 HIT: 0.7225388806601777
+
+#### val Acc: 0, NDCG: 0.7549145467874833 HIT: 0.8225276396529835
+Epoch: 96, plus 0 steps train_loss: 0.7011
+
+#### test Acc: 0, NDCG: 0.5588843089555062 HIT: 0.6792196757300042
+
+#### val Acc: 0, NDCG: 0.7201375433982375 HIT: 0.7894642006982648
+Epoch: 104, plus 0 steps train_loss: 0.702
+
+#### test Acc: 0, NDCG: 0.5081977336173358 HIT: 0.6332348643144308
+
+#### val Acc: 0, NDCG: 0.6899772290884838 HIT: 0.763571863097757
+Epoch: 112, plus 0 steps train_loss: 0.7044
+
+#### test Acc: 0, NDCG: 0.49024203505855934 HIT: 0.6181958844688955
+
+#### val Acc: 0, NDCG: 0.7011472075616401 HIT: 0.7739846725560727
+Epoch: 120, plus 0 steps train_loss: 0.7032
+
+#### test Acc: 0, NDCG: 0.24261038848691943 HIT: 0.39126143937790947
+
+#### val Acc: 0, NDCG: 0.5357807967194476 HIT: 0.6295468221011427
+Epoch: 128, plus 0 steps train_loss: 0.6977
+
+#### test Acc: 0, NDCG: 0.13050085474554757 HIT: 0.28772267112780364
+
+#### val Acc: 0, NDCG: 0.4879802741713012 HIT: 0.5796119538192975
+Epoch: 136, plus 0 steps train_loss: 0.7009
+
+#### test Acc: 0, NDCG: 0.1334473929815507 HIT: 0.28381063531527717
+
+#### val Acc: 0, NDCG: 0.4968289219105435 HIT: 0.5849084519149387
+Epoch: 144, plus 0 steps train_loss: 0.7021
+
+#### test Acc: 0, NDCG: 0.2760440247359112 HIT: 0.41110099053110455
+
+#### val Acc: 0, NDCG: 0.5514748731973105 HIT: 0.6394446942446044
+Epoch: 160, plus 0 steps train_loss: 0.6965
+
+#### test Acc: 0, NDCG: 0.45955081518337604 HIT: 0.5941723643144308
+
+#### val Acc: 0, NDCG: 0.678503594276632 HIT: 0.7607897138171815
+Epoch: 176, plus 0 steps train_loss: 0.6963
+
+#### test Acc: 0, NDCG: 0.6028486569633335 HIT: 0.7200534609077444
+
+#### val Acc: 0, NDCG: 0.7538867502524573 HIT: 0.82413030972281
+Epoch: 192, plus 0 steps train_loss: 0.6979
+
+#### test Acc: 0, NDCG: 0.5577743815983404 HIT: 0.6778715814113415
+
+#### val Acc: 0, NDCG: 0.7327153541824801 HIT: 0.8040609791578502
+Epoch: 208, plus 0 steps train_loss: 0.6976
+
+#### test Acc: 0, NDCG: 0.5754731762063665 HIT: 0.7076875264494288
+
+#### val Acc: 0, NDCG: 0.7249307462103286 HIT: 0.7972345469212865
+Epoch: 224, plus 0 steps train_loss: 0.7003
+
+#### test Acc: 0, NDCG: 0.2320486770835266 HIT: 0.37521324851883203
+
+#### val Acc: 0, NDCG: 0.5352433763115231 HIT: 0.6313528221540414
+Epoch: 240, plus 0 steps train_loss: 0.6981
+
+#### test Acc: 0, NDCG: 0.16625067047952224 HIT: 0.32805474370503596
+
+#### val Acc: 0, NDCG: 0.4995869269928536 HIT: 0.5907736127274651
+Epoch: 256, plus 0 steps train_loss: 0.7002
+
+#### test Acc: 0, NDCG: 0.1254451148657829 HIT: 0.2729076848815066
+
+#### val Acc: 0, NDCG: 0.4803348811742052 HIT: 0.5658557712653407
+Epoch: 272, plus 0 steps train_loss: 0.6974
+
+#### test Acc: 0, NDCG: 0.12788100853339132 HIT: 0.2803333619868811
+
+#### val Acc: 0, NDCG: 0.47926585468752736 HIT: 0.5718837613732544
+Epoch: 288, plus 0 steps train_loss: 0.6971
+
+#### test Acc: 0, NDCG: 0.14587784285235494 HIT: 0.3080523632564537
+
+#### val Acc: 0, NDCG: 0.48972653554217643 HIT: 0.5829247447630131
+Epoch: 304, plus 0 steps train_loss: 0.6976
+
+#### test Acc: 0, NDCG: 0.1461245187653521 HIT: 0.30469576544646637
+
+#### val Acc: 0, NDCG: 0.48550727266647525 HIT: 0.577555510738468
+Epoch: 320, plus 0 steps train_loss: 0.6972
+
+#### test Acc: 0, NDCG: 0.5842450237073015 HIT: 0.6979409119763013
+
+#### val Acc: 0, NDCG: 0.7441128406141576 HIT: 0.8223821677951756
+Epoch: 352, plus 0 steps train_loss: 0.696
+
+#### test Acc: 0, NDCG: 0.15713906287969695 HIT: 0.3153019863520948
+
+#### val Acc: 0, NDCG: 0.47497000354994773 HIT: 0.5676386280681338
+Epoch: 384, plus 0 steps train_loss: 0.6963
+
+#### test Acc: 0, NDCG: 0.6687602057513263 HIT: 0.7563701795916209
+
+#### val Acc: 0, NDCG: 0.8052475924374952 HIT: 0.8622373241112992
+Epoch: 416, plus 0 steps train_loss: 0.6957
+
+#### test Acc: 0, NDCG: 0.6658377938033906 HIT: 0.7579058995450698
+
+#### val Acc: 0, NDCG: 0.7835973881665552 HIT: 0.8416414846064325
+Epoch: 448, plus 0 steps train_loss: 0.6949
+
+#### test Acc: 0, NDCG: 0.6345149763554125 HIT: 0.7380184088023699
+
+#### val Acc: 0, NDCG: 0.8059508441842193 HIT: 0.8661609315488786
+Epoch: 480, plus 0 steps train_loss: 0.6962
+
+#### test Acc: 0, NDCG: 0.6625439106841904 HIT: 0.7529177026026238
+
+#### val Acc: 0, NDCG: 0.7949636078321333 HIT: 0.8456568384997883
+Epoch: 512, plus 0 steps train_loss: 0.6976
+
+#### test Acc: 0, NDCG: 0.6633196701998912 HIT: 0.7591639004972492
+
+#### val Acc: 0, NDCG: 0.781446961981067 HIT: 0.8383344794752433
+Epoch: 544, plus 0 steps train_loss: 0.6969
+
+#### test Acc: 0, NDCG: 0.6805777613233069 HIT: 0.7686633781210326
+
+#### val Acc: 0, NDCG: 0.8072237770905248 HIT: 0.8575384177951756
+Epoch: 576, plus 0 steps train_loss: 0.6967
+
+#### test Acc: 0, NDCG: 0.6328270666874469 HIT: 0.7363793707680915
+
+#### val Acc: 0, NDCG: 0.7900648963847647 HIT: 0.8470107186309775
+Epoch: 608, plus 0 steps train_loss: 0.6956
+
+#### test Acc: 0, NDCG: 0.6542839442579303 HIT: 0.7479906699640287
+
+#### val Acc: 0, NDCG: 0.7913113540091158 HIT: 0.8543884561468472
+Epoch: 640, plus 0 steps train_loss: 0.6944
+
+#### test Acc: 0, NDCG: 0.6481121215615938 HIT: 0.741840351248413
+
+#### val Acc: 0, NDCG: 0.7985244514151555 HIT: 0.8513707416419806
+Epoch: 704, plus 0 steps train_loss: 0.6958
+
+#### test Acc: 0, NDCG: 0.28786894647594263 HIT: 0.43922995794540837
+
+#### val Acc: 0, NDCG: 0.5629628625456999 HIT: 0.6547729647164621
+Epoch: 768, plus 0 steps train_loss: 0.6949
+
+#### test Acc: 0, NDCG: 0.245595942374679 HIT: 0.39800934987304276
+
+#### val Acc: 0, NDCG: 0.5420257384400722 HIT: 0.6385065660706729
+Epoch: 832, plus 0 steps train_loss: 0.6944
+
+#### test Acc: 0, NDCG: 0.34006124297460005 HIT: 0.4888986788510369
+
+#### val Acc: 0, NDCG: 0.5976712027412348 HIT: 0.6863238269678374
+Epoch: 896, plus 0 steps train_loss: 0.6954
+
+#### test Acc: 0, NDCG: 0.45254443106156 HIT: 0.5894924685251799
+
+#### val Acc: 0, NDCG: 0.6510903545151672 HIT: 0.7288883966356327
+Epoch: 960, plus 0 steps train_loss: 0.6946
+
+#### test Acc: 0, NDCG: 0.5303623229543132 HIT: 0.6565268924566229
+
+#### val Acc: 0, NDCG: 0.7035280322746348 HIT: 0.776971804909014
+Epoch: 1017, plus 0 steps train_loss: 0.6973
+Done: it took 143159.93570399284
+max value of NDCG: 0.6805777613233069
+max value of HIT: 0.7686633781210326
+
+After 20 validations
+max value of NDCG: 0.6805777613233069
+max value of HIT: 0.7686633781210326
