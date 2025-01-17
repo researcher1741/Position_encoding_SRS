@@ -101,9 +101,16 @@ class Skeleton(nn.Module):
         return user_emb
 
     def Decoder(self, seq, seqcxt, p, p_mask):
+        """
+        :param seq: (B x L x CXT)
+        :param seqcxt: (B x L x CXT)
+        :param p: [B,L,H]
+        :param p_mask: [B,L,H]
+        :return: [B,L,H]
+        """
         # Encoding
-        o_mask = get_mask2(seq)
-        x = self.items_encoding(seq, seqcxt, o_mask)
+        o_mask = get_mask2(seq)  # [B,L]
+        x = self.items_encoding(seq, seqcxt, o_mask)  # [B,L,H]
         for idx, decoder_layer in enumerate(self.decoders):
             x = decoder_layer(
                 o=x,
@@ -126,7 +133,7 @@ class Skeleton(nn.Module):
         :return: float is test is None (B x 1, B x 1 B x 1)
         """
         user_emb = self.U_Encoder(user_seq)
-        p, p_mask = self.Encoder(seq, seqcxt, user_emb)
+        p, p_mask = self.Encoder(seq, seqcxt, user_emb)  # [B,L,H]
 
         # ### DECODER: TEST AND TRAIN
         pos_emb, neg_emb, test_emb = None, None, None

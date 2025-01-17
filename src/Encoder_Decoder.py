@@ -4,7 +4,8 @@ import torch.nn as nn
 from torch import Tensor
 
 from src.Attention_blocks import MHA, RMHA, DotHead, ROPEMHA
-from src.FeedFordward import PointWiseFeedForward, PointWiseFeedForwardOut
+from src.FeedFordward import PointWiseFeedForward, PointWiseFeedForwardOut,\
+    PointWiseFeedForwardDotHead
 
 
 class EncoderBlock(nn.Module):
@@ -95,21 +96,30 @@ class DecoderBlock(nn.Module):
                                   config.attention_probs_dropout_prob,
                                   config.intercalate_act)
         elif config.decoder_head == "dot":
-            self.attn_layer = DotHead(config.embedding_d,
-                                      config.num_heads,
-                                      config.attention_probs_dropout_prob,
-                                      config.intercalate_act)
+            self.attn_layer = DotHead()
         else:
             print("There was no decoding head, or at least not accepted")
 
         if config.dropout_btn_MHA_FF:
             self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        self.FFOut = PointWiseFeedForwardOut(config)
+        if config.decoder_head == "dot":
+            self.FFOut = PointWiseFeedForwardDotHead(config)
+        else:
+            self.FFOut = PointWiseFeedForwardOut(config)
 
     def forward(self, o: Tensor, o_mask: Tensor, p: Tensor, p_mask: Tensor) -> Tensor:
+        """
+        :param o: [B,L,H]
+        :param o_mask: [B,L,H]
+        :param p: [B,L,H]
+        :param p_mask: [B,L,H]
+        :return:
+        """
         # causal = -1 if self.training else None
         # Attention part
         s = self.attn_layer(o, p, p, q_mask=o_mask, k_mask=p_mask, causal=None)
+        if self.config.decoder_head == "dot":
+            return self.FFOut(s)
         if self.config.residual_connection_decoder == "mul":
             s *= o
         elif self.config.residual_connection_decoder == "sum":
@@ -117,11 +127,7 @@ class DecoderBlock(nn.Module):
         if self.config.dropout_btn_MHA_FF:
             s = self.dropout(s)
         if self.config.mask_before_FF_decoder:
-            if self.config.decoder_head != "dot":
-                s *= o_mask.unsqueeze(2)  # [B, L, H] in code
-            else:
-                s *= o_mask  # [B, L, H] in code
-        if self.config.decoder_head != "dot":
+            s = s * o_mask.unsqueeze(2)
             s = self.FFOut(s)
         if not self.config.mask_before_FF_decoder:
             s *= o_mask  # [B, L] in code

@@ -101,7 +101,7 @@ class SeqRS_Trainer:
         print("Loading Model ...")
         self.model = Skeleton(config, Features, self.device)  # , feat_dim)
         self.model.to(self.device)
-        self.model = DDP(self.model, device_ids=[self.rank])
+        self.model = DDP(self.model, device_ids=[self.rank])  # , find_unused_parameters=True)
         model_parameters = filter(lambda p: p.requires_grad, self.model.parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
         print("Amount of model parameters", params)
@@ -303,7 +303,7 @@ class SeqRS_Trainer:
         return NDCG, HIT
 
 
-def callme(hidden_act, encoding, max_norm, norm_type, dataset, start, need):
+def callme(hidden_act, encoding, max_norm, norm_type, dataset, start, need, sasrecplus):
     if norm_type in [1E-2] and max_norm in [1E-0]:
         start, end = 2, 5
     seeds = [45, 46, 304, 567,
@@ -351,8 +351,9 @@ def callme(hidden_act, encoding, max_norm, norm_type, dataset, start, need):
         hidden_act = "leakyrelu"
 
     if "long" in encoding.lower():
-        encoding = encoding.replace('long', "")
-        encoding = encoding.replace('Long', "")
+        import re
+        pattern = '|'.join(map(re.escape, ["Longer", "longer", "Long", "long", "1200", "1400"]))
+        encoding = re.sub(pattern, '', encoding)
         Longer = True
 
     if "carca" == encoding:
@@ -410,6 +411,12 @@ def callme(hidden_act, encoding, max_norm, norm_type, dataset, start, need):
         RMHA_encoder = True
         RMHA_decoder = False
 
+    if sasrecplus:
+        config1.decoder_head = "dot"
+        config1.batch_size = 700
+        config1.hidden_units = 90
+        config1.num_epochs = int(5 * 100)
+        base_name1 += "_dot"
     for seed in seeds:
         base_name = base_name1 + "nmax_" + str(max_norm)
         base_name += "_ntype_" + str(norm_type)
@@ -435,6 +442,7 @@ def callme(hidden_act, encoding, max_norm, norm_type, dataset, start, need):
         np.random.seed(seed)
         torch.manual_seed(seed)
         world_size = 1
+        # SeqRS_Trainer(1, "cuda", config.dataset, base_name, seed, config, world_size)
         mp.spawn(SeqRS_Trainer, args=("cuda",
                                       config.dataset,
                                       base_name,

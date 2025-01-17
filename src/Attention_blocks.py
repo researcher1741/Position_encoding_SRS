@@ -64,31 +64,15 @@ class AttentionMechanism(nn.Module):
         pass
 
 
-class DotHead(AttentionMechanism):
-    """ This module is a dot product block. """
-    def __init__(self, embed_dim: int, num_heads: int,
-                 dropout: float, intercalate_act: bool):
-        super().__init__(embed_dim, 1, dropout, intercalate_act)
+class DotHead(nn.Module):
+    def __init__(self) -> None:
+        super().__init__()
         self.sig = nn.Sigmoid()
 
-    def forward(
-            self,
-            query: Tensor,
-            key: Tensor,
-            value: Tensor,
-            q_mask: Tensor,
-            k_mask: Tensor,
-            causal: int = None,
-            return_w: bool = False,
-    ) -> Tensor:
-        if self.training:
-            # Dot-product between profile items and target items
-            y = torch.sum(key * query, dim=-1)
-        else:
-            # Dot-product between last profile item and target items
-            y = torch.sum(key[:, -1:, :] * query, dim=-1)
-        attn_mask = self.masking(q_mask, k_mask, causal)  # bool mask
-        y *= attn_mask
+    def forward(self, query: Tensor, key: Tensor, q: Tensor, q_mask: Tensor, k_mask: Tensor, causal=None) -> Tensor:
+        y = torch.sum(key * query, dim=-1)  # Dot-product between profile items and target items
+        y = self.sig.forward(y)  # Apply sigmoid activation
+        y = y * q_mask  # [B, L] in code
         return y
 
 
@@ -113,18 +97,18 @@ class MHA(AttentionMechanism):
             self.scale = self.scale.to(query.get_device())
             self.first = False
 
-        query = self.WQ(query)
-        key = self.WK(key)
-        value = self.WV(value)
+        query = self.WQ(query)  # [B,L,H]
+        key = self.WK(key)  # [B,L,H]
+        value = self.WV(value)  # [B,L,H]
 
         if hasattr(self, 'middle_activation'):
             query = self.middle_activation(query)
             key = self.middle_activation(key)
             value = self.middle_activation(value)
 
-        query = torch.cat(torch.split(query, self.Hd, dim=2), dim=0)
-        key = torch.cat(torch.split(key, self.Hd, dim=2), dim=0)
-        value = torch.cat(torch.split(value, self.Hd, dim=2), dim=0)
+        query = torch.cat(torch.split(query, self.Hd, dim=2), dim=0)  # [B,L,H]
+        key = torch.cat(torch.split(key, self.Hd, dim=2), dim=0)  # [B,L,H]
+        value = torch.cat(torch.split(value, self.Hd, dim=2), dim=0)  # [B,L,H]
 
         attn_mask = self.masking(q_mask, k_mask, causal)  # bool mask
         add_mask = torch.where(attn_mask, 0.0, -1e10)  # True = 0, False = -1e10

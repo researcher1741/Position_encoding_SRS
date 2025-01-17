@@ -59,8 +59,30 @@ class PointWiseFeedForwardOut(FF):
         self._init_weights(self.ffn)
 
     def forward(self, s):
-        y = self.ffn.forward(s, )
+        y = self.ffn.forward(s, )  # [B, L, H] -> [B, L, 1]
         y = y.squeeze()  # Squeeze output ([B, L, 1] -> [B, L])
+        return y
+
+
+class PointWiseFeedForwardDotHead(FF):
+    """
+    Feedforward network designed for [B, L] input tensors.
+    Applies a linear transformation followed by a sigmoid activation.
+    """
+    def __init__(self, config):
+        super().__init__()
+        # Adjust in_features to 1 since input is [B, L]
+        self.ffn = nn.Linear(in_features=1, out_features=1)
+        self.sig = nn.Sigmoid()
+        # Initialize weights using the parent class's _init_weights method
+        self._init_weights(self.ffn)
+
+    def forward(self, s: Tensor) -> Tensor:
+        # Ensure input tensor has shape [B, L, 1] to match nn.Linear's expectation
+        s = s.unsqueeze(-1)         # [B, L] -> [B, L, 1]
+        y = self.ffn(s)             # [B, L, 1] -> [B, L, 1]
+        y = self.sig(y)             # [B, L, 1] -> [B, L, 1]
+        y = y.squeeze(-1)           # [B, L, 1] -> [B, L]
         return y
 
 

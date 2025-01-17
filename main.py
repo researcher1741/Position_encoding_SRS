@@ -1,14 +1,17 @@
 from src.train import *
+import itertools
 
 if __name__ == '__main__':
     import numpy as np
-    cases = [
-            {'activation': 'leaky', 'encoding': 'carca', 'nmax': 0.0001, 'ntype': 2.0},
-            {'activation': 'leaky', 'encoding': 'conRotatory', 'nmax': 0.0001, 'ntype': 2.0},
-            {'activation': 'leaky', 'encoding': 'RMHA4', 'nmax': 0.0001, 'ntype': 2.0},
-            {'activation': 'leaky', 'encoding': 'carca', 'nmax': 0.1, 'ntype': 2.0},
-            {'activation': 'leaky', 'encoding': 'conRotatory', 'nmax': 0.1, 'ntype': 2.0},
-            {'activation': 'leaky', 'encoding': 'RMHA4', 'nmax': 0.1, 'ntype': 2.0},
-    ]
-    for case in cases:
-        print(callme(case['activation'], case['encoding'], case['nmax'], case['ntype'], 'submen3', 0, 6))
+    activations = ["leakyrelu", "silu"]
+    encodings = ["RMHA4", "carca",
+                 "ROPEONE", "ROPE",
+                 "conlearnt", "learnt",
+                 "conRotatory", "Rotatory",
+                 "con", "nocon"]
+    nmaxs = [0.1, 0.0001]
+    sasrecplus = True
+
+    for activation, encoding, nmax in itertools.product(activations, encodings, nmaxs):
+        print(activation, encoding, nmax)
+        print(callme(activation, encoding, nmax, 2, 'fashion', 0, 6, sasrecplus))
